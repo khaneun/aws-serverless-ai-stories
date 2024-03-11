@@ -1,7 +1,8 @@
 <div align="center">
 
-<h1>📖 AI Generated Stories</h1>
-<p>Example open source event-driven application that generates a new bed time story for your children every night using Lambda, EventBridge, DynamoDB, App Runner, ChatGPT and DALL-E.</p>
+<h1>📖 생성형 AI를 활용한 동화 생성하기</h1>
+<p>AWS에서 제공하는 예제를 그대로 번역하여, 2024년 03월 11일 기준 Working Example Tip을 포함하여 편집합니다.</p>
+<p>AWS Service(Lambda, EventBridge, DynamoDB, App Runner)와 Open AI(ChatGPT, DALL-E)를 활용하여 매일 밤 자녀에게 새로운 동화를 만들어주는 이벤트 기반 예제입니다. </p>
 
 <p><a href="https://aws-blogs-prod.amazon.com/compute/implementing-an-event-driven-serverless-story-generation-application-with-chatgpt-and-dall-e/">Read the blog post &rarr;</a></p>
 
@@ -10,26 +11,26 @@
 
 <img alt="header" src="./screenshot.png" />
 
-  <h3>Features: New story every day, Audio using Amazon Polly, story using ChatGPT and images by DALL-E, all generated from an event-driven architecture.</h3>
+  <h3>핵심 기능: 매일 새로운 동화, Amazon Polly를 활용한 오디오 생성, ChatGPT 활용 동화 생성 및 DALL-E 장면 생성, Event-driven architecture 기반 생성.</h3>
 
 </div>
 
 <hr/>
 
-# Core Features
+# 핵심 기능
 
 - ⏱️ [EventBridge Scheduler](https://aws.amazon.com/blogs/compute/introducing-amazon-eventbridge-scheduler/) to generate new story every bedtime
 - 📦 Event architecture using [Amazon EventBridge](https://aws.amazon.com/eventbridge/) to fan out processing of images, audio and emails.
-- 🤖 New unqiue story every night using [ChatGPT and DALL-E](https://openai.com/blog/chatgpt) for images
-- 🧑‍💻 Deploy with [AWS CDK](https://aws.amazon.com/cdk/)
+- 🤖 [ChatGPT and DALL-E](https://openai.com/blog/chatgpt)를 활용한 매일 밤 새로운 동화와 작화 생성
+- 🧑‍💻 [AWS CDK](https://aws.amazon.com/cdk/)로 배포
 
-# How it works
+# 동작 방식
 
 ![Architecture diagram](./architecture.png)
 
-1. Every day at a configured time an [EventBridge Schedule](https://aws.amazon.com/blogs/compute/introducing-amazon-eventbridge-scheduler/) is trigger which triggers a Lambda function.
+1. Lambda function을 활용하여 매일 정해진 시간에 동작하는 [EventBridge Schedule](https://aws.amazon.com/blogs/compute/introducing-amazon-eventbridge-scheduler/) 
 
-2.	The `create-story` lambda function takes characters and scenes from the [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) tables and uses [ChatGPT](https://openai.com/blog/chatgpt) (OpenAI API) to create the story. The story is stored with a 2 day TTL in DynamoDB.
+2.	`create-story` lambda function은 등장 인물과 장면을 [Amazon DynamoDB](https://aws.amazon.com/dynamodb/)에서 읽어와서 [ChatGPT](https://openai.com/blog/chatgpt) (OpenAI API)가 동화를 생성합니다. 생성된 동화는 2일간 DynamoDB에 저장됩니다. (2 day TTL; 2일 보관)
 
 3.	An [Amazon EventBridge Pipe](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes.html) is configured to [listen to all New items created inside the table using streams](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html#:~:text=A%20DynamoDB%20stream%20is%20an,data%20items%20in%20the%20table.) and triggers an [Amazon EventBridge event](https://aws.amazon.com/eventbridge/) (StoryCreated).
 
